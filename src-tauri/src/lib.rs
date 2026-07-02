@@ -259,6 +259,15 @@ pub fn run() {
             toggle_autostart,
             get_autostart_enabled,
             open_process_logs,
+            open_game_install_dir,
+            #[cfg(target_os = "linux")]
+            open_game_wine_prefix,
+            #[cfg(target_os = "linux")]
+            install_winetricks_verb,
+            #[cfg(target_os = "linux")]
+            list_winetricks_verbs,
+            #[cfg(target_os = "linux")]
+            run_winecfg,
             get_launch_options,
             #[cfg(target_os = "linux")]
             ::process::compat::fetch_proton_paths,
