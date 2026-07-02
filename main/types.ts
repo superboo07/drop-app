@@ -53,7 +53,11 @@ export type GameVersion = {
   userConfiguration: {
     launchTemplate: string;
     overrideProtonPath: string;
-    enableUpdates: boolean
+    enableUpdates: boolean;
+    disableDxvk: boolean;
+    disableEsync: boolean;
+    disableFsync: boolean;
+    extraEnvVars: string;
   };
   setups: Array<{ platform: string }>;
   launches: Array<{ platform: string }>;

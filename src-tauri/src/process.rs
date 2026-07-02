@@ -167,6 +167,8 @@ fn run_wine_tool(
         umu_id_override.to_string()
     };
 
+    let compat_env = process::process_handlers::compat_env_vars(&game_version.user_configuration);
+
     drop(db_lock);
 
     let pfx_dir = DATA_ROOT_DIR.join("pfx").join(&game_id);
@@ -203,6 +205,7 @@ fn run_wine_tool(
         .arg(tool)
         .args(extra_args)
         .envs(extra_env.iter().copied())
+        .envs(compat_env)
         .env("GAMEID", umu_game_id)
         .env("PROTONPATH", proton_path)
         .env("WINEPREFIX", pfx_dir)

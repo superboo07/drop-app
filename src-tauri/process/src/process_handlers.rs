@@ -7,6 +7,34 @@ use database::{
 
 use crate::{error::ProcessError, process_manager::ProcessHandler};
 
+// Builds the Proton/Wine compatibility env vars derived from a game's
+// per-game UserConfiguration toggles (disable DXVK/ESync/FSync) plus any
+// user-supplied extra `KEY=value` lines, shared between the actual game
+// launch (UMUCompatLauncher below) and the winecfg/winetricks tool runner
+// (src-tauri/src/process.rs's run_wine_tool).
+pub fn compat_env_vars(user_configuration: &database::UserConfiguration) -> Vec<(String, String)> {
+    let mut vars = Vec::new();
+    if user_configuration.disable_dxvk {
+        vars.push(("PROTON_USE_WINED3D".to_owned(), "1".to_owned()));
+    }
+    if user_configuration.disable_esync {
+        vars.push(("PROTON_NO_ESYNC".to_owned(), "1".to_owned()));
+    }
+    if user_configuration.disable_fsync {
+        vars.push(("PROTON_NO_FSYNC".to_owned(), "1".to_owned()));
+    }
+    for line in user_configuration.extra_env_vars.lines() {
+        let line = line.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        if let Some((key, value)) = line.split_once('=') {
+            vars.push((key.trim().to_owned(), value.trim().to_owned()));
+        }
+    }
+    vars
+}
+
 pub struct MacLauncher;
 impl ProcessHandler for MacLauncher {
     fn create_launch_process(
@@ -149,9 +177,14 @@ impl ProcessHandler for UMUCompatLauncher {
         }
         let proton_env = format!("PROTONPATH={}", proton_path);
 
+        let extra_env = compat_env_vars(&game_version.user_configuration)
+            .into_iter()
+            .map(|(key, value)| format!("{key}={}", shell_words::quote(&value)))
+            .collect::<Vec<_>>()
+            .join(" ");
+
         Ok(format!(
-            "GAMEID={game_id} {} WINEPREFIX={} {umu:?} {launch}",
-            proton_env,
+            "GAMEID={game_id} {proton_env} WINEPREFIX={} {extra_env} {umu:?} {launch}",
             pfx_dir.to_string_lossy(),
             umu = UMU_LAUNCHER_EXECUTABLE
                 .as_ref()

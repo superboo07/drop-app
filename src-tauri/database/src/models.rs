@@ -80,6 +80,10 @@ pub mod data {
                 launch_template: "{}".to_owned(),
                 override_proton_path: None,
                 enable_updates: false,
+                disable_dxvk: false,
+                disable_esync: false,
+                disable_fsync: false,
+                extra_env_vars: String::new(),
             }
         }
 
@@ -89,6 +93,14 @@ pub mod data {
             pub launch_template: String,
             pub override_proton_path: Option<String>,
             pub enable_updates: bool,
+            #[serde(default)]
+            pub disable_dxvk: bool,
+            #[serde(default)]
+            pub disable_esync: bool,
+            #[serde(default)]
+            pub disable_fsync: bool,
+            #[serde(default)]
+            pub extra_env_vars: String,
         }
 
         impl Default for UserConfiguration {
