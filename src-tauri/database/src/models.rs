@@ -154,7 +154,9 @@ pub mod data {
         pub struct Settings {
             pub autostart: bool,
             pub max_download_threads: usize,
-            pub force_offline: bool, // ... other settings ...
+            pub force_offline: bool,
+            #[serde(default)]
+            pub quit_on_close: bool, // ... other settings ...
         }
         impl Default for Settings {
             fn default() -> Self {
@@ -162,6 +164,7 @@ pub mod data {
                     autostart: false,
                     max_download_threads: 4,
                     force_offline: false,
+                    quit_on_close: false,
                 }
             }
         }

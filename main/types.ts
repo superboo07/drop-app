@@ -119,4 +119,5 @@ export type Settings = {
   autostart: boolean;
   maxDownloadThreads: number;
   forceOffline: boolean;
+  quitOnClose: boolean;
 };

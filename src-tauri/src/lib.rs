@@ -425,10 +425,13 @@ pub fn run() {
         })
         .on_window_event(|window, event| {
             if let WindowEvent::CloseRequested { api, .. } = event {
-                run_on_tray(|| {
-                    window.hide().expect("Failed to close window in tray");
-                    api.prevent_close();
-                });
+                let quit_on_close = borrow_db_checked().settings.quit_on_close;
+                if !quit_on_close {
+                    run_on_tray(|| {
+                        window.hide().expect("Failed to close window in tray");
+                        api.prevent_close();
+                    });
+                }
             }
         })
         .build(tauri::generate_context!())
@@ -436,11 +439,14 @@ pub fn run() {
 
     app.run(|_app_handle, event| {
         if let RunEvent::ExitRequested { code, api, .. } = event {
-            run_on_tray(|| {
-                if code.is_none() {
-                    api.prevent_exit();
-                }
-            });
+            let quit_on_close = borrow_db_checked().settings.quit_on_close;
+            if !quit_on_close {
+                run_on_tray(|| {
+                    if code.is_none() {
+                        api.prevent_exit();
+                    }
+                });
+            }
         }
     });
 }
