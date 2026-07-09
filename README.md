@@ -1,3 +1,7 @@
+# NOTE
+
+This release has changes that are mostly vibecoded, it is not a replacement for the original project and may have issues the original does not have. Anytime you have an issue while using this project please open the issue report *here*.
+
 # Drop Desktop Client
 
 The Drop Desktop Client is the companion app for [Drop](https://github.com/Drop-OSS/drop). It is the official & intended way to download and play games on your Drop server.
