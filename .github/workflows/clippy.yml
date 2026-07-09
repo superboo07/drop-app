@@ -7,6 +7,8 @@ jobs:
       checks: write
     steps:
       - uses: actions/checkout@v1
+        with:
+          repository: superboo07/drop-app
       - name: install dependencies (ubuntu only)
         run: |
           sudo apt-get update
