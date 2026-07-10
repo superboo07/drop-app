@@ -125,4 +125,6 @@ export type Settings = {
   forceOffline: boolean;
   quitOnClose: boolean;
   windowedLaunchPicker: boolean;
+  startFullscreen: boolean;
+  uiScale: number;
 };

@@ -1,5 +1,16 @@
+allowBuilds:
+  optipng-bin: true
+  pngquant-bin: true
+  sharp: true
+  tauri: true
+  zopflipng-bin: true
+
 onlyBuiltDependencies:
+  - optipng-bin
+  - pngquant-bin
   - sharp
+  - tauri
+  - zopflipng-bin
 
 overrides:
   cross-spawn@<6.0.6: '>=6.0.6'
